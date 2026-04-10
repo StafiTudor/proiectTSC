@@ -78,18 +78,32 @@ Proiectul a fost gândit să fie un dispozitiv portabil eficient energetic.
 
 ## 4. Alocarea Pinilor (Pinout nRF52840) și Justificare
 
-Microcontrolerul Nordic nRF52840 permite maparea flexibilă a interfețelor (I2C, SPI) pe majoritatea pinilor GPIO. Alocarea de mai jos a fost aleasă strategic pentru a optimiza rutarea pe PCB, minimizând încrucișările de trasee (vias) și asigurând integritatea semnalului.
+Microcontrolerul Nordic nRF52840 permite maparea flexibilă a interfețelor (I2C, SPI) pe majoritatea pinilor GPIO. Alocarea de mai jos a fost extrasă direct din schema proiectului și a fost gândită pentru a optimiza rutarea traseelor pe PCB, menținând integritatea semnalelor.
 
-### Tabelul alocărilor hardware:
-
-| Componentă | Nume Pin nRF | Tip Semnal | Explicație / Rol în sistem |
-| :--- | :--- | :--- | :--- |
-| **Magistrala I2C (Comună)** | **P0.06**<br>**P0.07** | `SDA`<br>`SCL` | Comunicația I2C principală a plăcii. Leagă senzorii și cipurile de power (IMU, Charger, Fuel Gauge, Haptic). S-au folosit pinii 0.06 și 0.07 datorită proximității față de zona de power a plăcii. |
-| **E-Paper Display** | **P1.15**<br>**P1.14**<br>**P0.05** | `SCK`<br>`MOSI`<br>`CS` | Magistrala SPI (fără MISO, deoarece ecranul doar primește date, nu transmite). Gruparea pinilor facilitează rutarea unui bus curat către conectorul FPC. `CS` (Chip Select) activează ecranul. |
-| **E-Paper Control** | **P0.15**<br>**P0.16**<br>**P0.17** | `EPD_DC`<br>`EPD_RST`<br>`EPD_BUSY` | Pini dedicați controlului E-ink: `DC` (Data/Command toggle), `RST` (Hardware Reset) și `BUSY` (intrare pentru a citi când ecranul a terminat refresh-ul, economisind energie). |
-| **Accelerometru (BMA423)** | **P0.08**<br>**P1.08** | `IMU_INT1`<br>`IMU_INT2` | Pini de Interrupt. Extrem de importanți pentru consumul redus: MCU-ul stă în *Deep Sleep* și este trezit hardware doar când BMA423 detectează o mișcare (ex: ridicarea mâinii). |
-| **Power Mgmt (BQ / MAX)** | **P0.11**<br>**P0.09** | `PMIC_INT`<br>`ALERT` | Pini de Interrupt pentru energie. Trezesc MCU-ul când se conectează cablul USB, se termină încărcarea sau bateria scade sub un prag critic. |
-| **Haptic Driver (DRV2605)**| **P0.12** | `HAPTIC_EN` | Pin de Enable. Pornește sau oprește alimentarea driverului haptic hardware, prevenind scurgerile de curent când motorul nu vibrează. |
-| **Port USB-C** | **D-** / **D+** | `USB_D-`<br>`USB_D+` | nRF52840 are suport hardware USB nativ, așadar acești pini duc direct datele către conectorul USB-C. |
-| **Interfață Debug (TC2030)**| **SWDIO**<br>**SWDCLK**<br>**P1.00** | `SWDIO`<br>`SWDCLK`<br>`SWO` | Interfața standard Serial Wire Debug. Necesară pentru flash-uirea bootloader-ului, a firmware-ului și pentru live-debugging. |
-| **Oscilatoare (Cristale)** | **P0.00 / 0.01**<br>**XC1 / XC2** | `XL1 / XL2`<br>`XC1 / XC2` | Conectate la cristalele de 32.768kHz (pentru RTC / timp real) și 32MHz (pentru radio Bluetooth). |
+| Nume Pin nRF | Nume Semnal | Componentă | Interfață | Rol / Motivul alocării |
+| :--- | :--- | :--- | :--- | :--- |
+| **P0.05** | `SDA` | Magistrala Comună | I2C | Serial Data. Partajat între IC-urile de putere și senzori. |
+| **P0.06** | `SCL` | Magistrala Comună | I2C | Serial Clock pentru sincronizarea comunicației I2C. |
+| **P0.02** | `SCK` | Ecran E-Paper | SPI | Serial Clock. Rutat pentru a facilita un traseu direct către conectorul display-ului. |
+| **P0.03** | `MOSI` | Ecran E-Paper | SPI | Master Out Slave In. Trimite datele de imagine către ecran. |
+| **P0.04** | `EPD_CS` | Ecran E-Paper | SPI (CS) | Chip Select. Activează panoul e-ink pe magistrala SPI. |
+| **P0.14** | `EPD_DC` | Ecran E-Paper | GPIO | Data/Command select. Comută între trimiterea de comenzi de configurare și pixeli efectivi. |
+| **P0.15** | `EPD_RST` | Ecran E-Paper | GPIO | Reset hardware pentru panou. |
+| **P0.16** | `EPD_BUSY`| Ecran E-Paper | GPIO (Int) | Semnal de intrare. Procesorul stă în sleep și este trezit când ecranul termină refresh-ul (devine LOW). |
+| **P0.07** | `IMU_INT1`| BMA423 (IMU) | GPIO (Int) | Întrerupere principală. Trezește hardware MCU-ul la detecția mișcării (ex: ridicarea mâinii). |
+| **P0.08** | `IMU_INT2`| BMA423 (IMU) | GPIO (Int) | Întrerupere secundară pentru procesarea avansată a gesturilor. |
+| **P1.09** | `PMIC_INT`| BQ25180 (Charger)| GPIO (Int) | Întrerupere Power Management. Alertează sistemul la conectarea portului USB. |
+| **P0.10** | `ALERT` | MAX17048 (Gauge)| GPIO (Int) | Întrerupere de la Fuel Gauge. Declanșată automat când bateria atinge pragul de "Low Battery". |
+| **P0.11** | `HAPTIC_EN`| DRV2605 (Driver)| GPIO | Enable hardware. Taie complet alimentarea driver-ului de vibrații când nu este folosit, salvând energie. |
+| **D- / D+** | `D- / D+` | Conector USB-C | USB | Pini dedicați hardware pentru comunicația USB 2.0 nativă. |
+| **VBUS** | `VBUS` | Conector USB-C | Power | Pin de detecție voltaj. Informează hardware-ul când dispozitivul primește 5V extern. |
+| **P0.18** | `RESET` | Interfață TC2030 | SWD | Pin hardware pentru resetarea procesorului din exterior via programator. |
+| **SWDIO** | `SWDIO` | Interfață TC2030 | SWD | Pin dedicat pentru transferul bidirecțional de date în modul debug. |
+| **SWDCLK**| `SWDCLK` | Interfață TC2030 | SWD | Clock-ul interfeței de programare. |
+| **P1.00** | `SWO` | Interfață TC2030 | SWD | Serial Wire Output. Permite logging de mare viteză fără a întrerupe execuția codului. |
+| **ANT** | `ANT` | Antenă Johanson | RF | Ieșirea fizică de 2.4GHz către filtrul de adaptare a impedanței. |
+| **P0.00 / 0.01**| `XL1 / XL2`| Cristal 32.768kHz| XTAL | Conexiuni pentru oscilatorul de frecvență joasă, necesar pentru modulul RTC. |
+| **XC1 / XC2** | `XC1 / XC2`| Cristal 32 MHz | XTAL | Conexiuni pentru oscilatorul principal, esențial pentru protocolul Bluetooth. |
+| **[Pin?]**| `SW_UP` | Buton Tactil | GPIO | Intrare digitală pentru navigare (Pull-up intern). *[Completează cu pinul din schemă]* |
+| **[Pin?]**| `SW_DN` | Buton Tactil | GPIO | Intrare digitală pentru navigare (Pull-up intern). *[Completează cu pinul din schemă]* |
+| **[Pin?]**| `SW_ENT` | Buton Tactil | GPIO | Intrare digitală pentru selectare (Pull-up intern). *[Completează cu pinul din schemă]* |
