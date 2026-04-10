@@ -76,13 +76,20 @@ Proiectul a fost gândit să fie un dispozitiv portabil eficient energetic.
 
 *Nota de consum:* Cu bateria estimată la ~250-300mAh, folosind funcțiile de sleep profund ale nRF52840 (consum în repaus de aprox. 1.5µA) și ecranul E-Paper care consumă energie doar la refresh, autonomia teoretică depășește o săptămână în utilizare moderată.
 
-## 4. Alocarea Pinilor (Pinout nRF52840)
+## 4. Alocarea Pinilor (Pinout nRF52840) și Justificare
 
-Toate componentele principale au fost rutate către MCU respectând capabilitățile perifericelor hardware:
+Microcontrolerul Nordic nRF52840 permite maparea flexibilă a interfețelor (I2C, SPI) pe majoritatea pinilor GPIO. Alocarea de mai jos a fost aleasă strategic pentru a optimiza rutarea pe PCB, minimizând încrucișările de trasee (vias) și asigurând integritatea semnalului.
 
-* **Magistrala I2C (SCL / SDA):** Conectată la BQ25180 (Charger), MAX17048 (Fuel Gauge), RT6160 (Regulator), BMA423 (IMU) și DRV2605 (Haptic).
-* **Magistrala SPI:** Conectată la display-ul E-Paper.
-* **Semnale RF:** Ieșirea de 2.4GHz conectată via circuit de adaptare la antena ceramică Johanson.
-* **Interfața de Debug (SWD):** Pinii SWDIO și SWDCLK sunt scoși pe portul de programare (TC2030) pentru flash-uire și debug facil.
-* **Butoane (GPIO):** 3 pini de intrare cu rezistențe de pull-up interne activate.
+### Tabelul alocărilor hardware:
 
+| Componentă | Nume Pin nRF | Tip Semnal | Explicație / Rol în sistem |
+| :--- | :--- | :--- | :--- |
+| **Magistrala I2C (Comună)** | **P0.06**<br>**P0.07** | `SDA`<br>`SCL` | Comunicația I2C principală a plăcii. Leagă senzorii și cipurile de power (IMU, Charger, Fuel Gauge, Haptic). S-au folosit pinii 0.06 și 0.07 datorită proximității față de zona de power a plăcii. |
+| **E-Paper Display** | **P1.15**<br>**P1.14**<br>**P0.05** | `SCK`<br>`MOSI`<br>`CS` | Magistrala SPI (fără MISO, deoarece ecranul doar primește date, nu transmite). Gruparea pinilor facilitează rutarea unui bus curat către conectorul FPC. `CS` (Chip Select) activează ecranul. |
+| **E-Paper Control** | **P0.15**<br>**P0.16**<br>**P0.17** | `EPD_DC`<br>`EPD_RST`<br>`EPD_BUSY` | Pini dedicați controlului E-ink: `DC` (Data/Command toggle), `RST` (Hardware Reset) și `BUSY` (intrare pentru a citi când ecranul a terminat refresh-ul, economisind energie). |
+| **Accelerometru (BMA423)** | **P0.08**<br>**P1.08** | `IMU_INT1`<br>`IMU_INT2` | Pini de Interrupt. Extrem de importanți pentru consumul redus: MCU-ul stă în *Deep Sleep* și este trezit hardware doar când BMA423 detectează o mișcare (ex: ridicarea mâinii). |
+| **Power Mgmt (BQ / MAX)** | **P0.11**<br>**P0.09** | `PMIC_INT`<br>`ALERT` | Pini de Interrupt pentru energie. Trezesc MCU-ul când se conectează cablul USB, se termină încărcarea sau bateria scade sub un prag critic. |
+| **Haptic Driver (DRV2605)**| **P0.12** | `HAPTIC_EN` | Pin de Enable. Pornește sau oprește alimentarea driverului haptic hardware, prevenind scurgerile de curent când motorul nu vibrează. |
+| **Port USB-C** | **D-** / **D+** | `USB_D-`<br>`USB_D+` | nRF52840 are suport hardware USB nativ, așadar acești pini duc direct datele către conectorul USB-C. |
+| **Interfață Debug (TC2030)**| **SWDIO**<br>**SWDCLK**<br>**P1.00** | `SWDIO`<br>`SWDCLK`<br>`SWO` | Interfața standard Serial Wire Debug. Necesară pentru flash-uirea bootloader-ului, a firmware-ului și pentru live-debugging. |
+| **Oscilatoare (Cristale)** | **P0.00 / 0.01**<br>**XC1 / XC2** | `XL1 / XL2`<br>`XC1 / XC2` | Conectate la cristalele de 32.768kHz (pentru RTC / timp real) și 32MHz (pentru radio Bluetooth). |
