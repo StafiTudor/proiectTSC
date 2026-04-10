@@ -104,6 +104,6 @@ Microcontrolerul Nordic nRF52840 permite maparea flexibilă a interfețelor (I2C
 | **ANT** | `ANT` | Antenă Johanson | RF | Ieșirea fizică de 2.4GHz către filtrul de adaptare a impedanței. |
 | **P0.00 / 0.01**| `XL1 / XL2`| Cristal 32.768kHz| XTAL | Conexiuni pentru oscilatorul de frecvență joasă, necesar pentru modulul RTC. |
 | **XC1 / XC2** | `XC1 / XC2`| Cristal 32 MHz | XTAL | Conexiuni pentru oscilatorul principal, esențial pentru protocolul Bluetooth. |
-| **[Pin?]**| `SW_UP` | Buton Tactil | GPIO | Intrare digitală pentru navigare (Pull-up intern). *[Completează cu pinul din schemă]* |
-| **[Pin?]**| `SW_DN` | Buton Tactil | GPIO | Intrare digitală pentru navigare (Pull-up intern). *[Completează cu pinul din schemă]* |
-| **[Pin?]**| `SW_ENT` | Buton Tactil | GPIO | Intrare digitală pentru selectare (Pull-up intern). *[Completează cu pinul din schemă]* |
+| **P0.13** | `SW_UP` | Buton Tactil | GPIO | Intrare digitală navigare (UP). Echipat cu filtru RC hardware pentru debouncing fizic. |
+| **P1.02** | `SW_DN` | Buton Tactil | GPIO | Intrare digitală navigare (DOWN). Echipat cu filtru RC hardware pentru debouncing fizic. |
+| **P0.14** | `SW_ENT`| Buton Tactil | GPIO | Intrare digitală confirmare (ENTER). Echipat cu filtru RC hardware pentru debouncing fizic. |
