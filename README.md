@@ -33,6 +33,8 @@ graph LR
     MCU ---|RF| ANT[Antenă Ceramică Johanson]
     BTN[Butoane Tactile x3] -->|GPIO| MCU
     SWD[TC2030 SWD Debug] <-->|SWD| MCU
+
+
 ## 2. Componente principale și linkuri utile (BOM)
 
 | Componenta | Link JLCPCB | DATASHEET |
