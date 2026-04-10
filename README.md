@@ -36,19 +36,18 @@ graph LR
 ```
 
 ## 2. Componente principale și linkuri utile (BOM)
-
 | Componenta | Link JLCPCB | DATASHEET |
 | :--- | :--- | :--- |
-| nRF52840 | [JLCPCB](https://jlcpcb.com/partdetail/NordicSemiconductor-nRF52840_QIAA_R/C190764) | [Nordic Product Specification](https://infocenter.nordicsemi.com/pdf/nRF52840_PS_v1.1.pdf) |
-| BQ25180YBGR | [JLCPCB](https://jlcpcb.com/partdetail/TexasInstruments-BQ25180YBGR/C5202685) | [TI BQ25180 datasheet](https://www.ti.com/lit/ds/symlink/bq25180.pdf) |
-| RT6160AWSC | [JLCPCB](https://jlcpcb.com/partdetail/Richtek-RT6160AWSC/C470211) | [Richtek RT6160A datasheet](https://www.richtek.com/assets/product_datasheet/RT6160/DS6160-01.pdf) |
-| MAX17048G+T10 | [JLCPCB](https://jlcpcb.com/partdetail/AnalogDevices-MAX17048G_T/C297892) | [MAX17048/MAX17049 datasheet](https://datasheets.maximintegrated.com/en/ds/MAX17048-MAX17049.pdf) |
-| BMA423 | [JLCPCB](https://jlcpcb.com/partdetail/BoschSensortec-BMA423/C236056) | [BMA423 datasheet](https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bma423-ds004.pdf) |
-| DRV2605YZFR | [JLCPCB](https://jlcpcb.com/partdetail/TexasInstruments-DRV2605YZFR/C135540) | [TI DRV2605 datasheet](https://www.ti.com/lit/ds/symlink/drv2605.pdf) |
-| 2450AT18B100E | [JLCPCB](https://jlcpcb.com/partdetail/JohansonTechnology-2450AT18B100E/C104593) | [Johanson antenna datasheet](https://www.johansontechnology.com/datasheets/2450AT18B100.pdf) |
-| USBLC6-2SC6Y | [JLCPCB](https://jlcpcb.com/partdetail/STMicroelectronics-USBLC6_2SC6Y/C165609) | [ST USBLC6-2 datasheet](https://www.st.com/resource/en/datasheet/usblc6-2.pdf) |
-| KH-TYPE-C-16P | [JLCPCB](https://jlcpcb.com/partdetail/Kinghelm-KH_TYPE_C_16P/C2954157) | [KH-TYPE-C-16P datasheet](https://datasheet.lcsc.com/lcsc/2112101730_Kinghelm-KH-TYPE-C-16P_C2954157.pdf) |
-| 5034802400 | [JLCPCB](https://jlcpcb.com/partdetail/Molex-5034802400/C2817812) | [Molex 503480 series chart](https://www.molex.com/p/molex/en-us/products/product-data-sheet?partNumber=5034802400) |
+| nRF52840 | [JLCPCB Search](https://jlcpcb.com/parts/componentSearch?searchTxt=nRF52840) | [Nordic Product Spec](https://docs.nordicsemi.com/bundle/ps_nrf52840/page/keyfeatures_html5.html) |
+| BQ25180YBGR | [JLCPCB Search](https://jlcpcb.com/parts/componentSearch?searchTxt=BQ25180YBGR) | [TI BQ25180 datasheet](https://www.ti.com/lit/ds/symlink/bq25180.pdf) |
+| RT6160AWSC | [JLCPCB Search](https://jlcpcb.com/parts/componentSearch?searchTxt=RT6160A) | [Richtek RT6160A datasheet](https://www.richtek.com/assets/product_datasheet/RT6160/DS6160-01.pdf) |
+| MAX17048G+T10 | [JLCPCB Search](https://jlcpcb.com/parts/componentSearch?searchTxt=MAX17048) | [Analog/Maxim datasheet](https://www.analog.com/media/en/technical-documentation/data-sheets/MAX17048-MAX17049.pdf) |
+| BMA423 | [JLCPCB Search](https://jlcpcb.com/parts/componentSearch?searchTxt=BMA423) | [BMA423 datasheet](https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bma423-ds004.pdf) |
+| DRV2605YZFR | [JLCPCB Search](https://jlcpcb.com/parts/componentSearch?searchTxt=DRV2605) | [TI DRV2605 datasheet](https://www.ti.com/lit/ds/symlink/drv2605.pdf) |
+| 2450AT18B100E | [JLCPCB Search](https://jlcpcb.com/parts/componentSearch?searchTxt=2450AT18B100E) | [Johanson antenna datasheet](https://www.johansontechnology.com/datasheets/2450AT18B100.pdf) |
+| USBLC6-2SC6Y | [JLCPCB Search](https://jlcpcb.com/parts/componentSearch?searchTxt=USBLC6-2SC6Y) | [ST USBLC6-2 datasheet](https://www.st.com/resource/en/datasheet/usblc6-2.pdf) |
+| KH-TYPE-C-16P | [JLCPCB Search](https://jlcpcb.com/parts/componentSearch?searchTxt=KH-TYPE-C-16P) | [KH-TYPE-C-16P datasheet](https://datasheet.lcsc.com/lcsc/2112101730_Kinghelm-KH-TYPE-C-16P_C2954157.pdf) |
+| 5034802400 | [JLCPCB Search](https://jlcpcb.com/parts/componentSearch?searchTxt=5034802400) | [Molex 503480 datasheet](https://www.molex.com/p/molex/en-us/products/product-data-sheet?partNumber=5034802400) |
 
 ## 3. Descrierea funcționalității hardware
 
