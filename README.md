@@ -8,31 +8,47 @@ Acest proiect reprezintă designul hardware complet pentru un smartwatch bazat p
 Arhitectura proiectului este împărțită în 3 etaje principale: Input & Management Energie (Power), Unitatea Centrală de Procesare (Core MCU) și Interfețe Externe (Periferice și RF).
 
 ```mermaid
-graph LR
-    %% Alimentare
-    USB[USB-C KH-TYPE-C-16P] -->|5V| BQ[BQ25180 LiPo Charger]
-    BQ -->|Încărcare| BAT[LiPo Battery 3.7V]
-    BAT -->|VBAT| MAX[MAX17048 Fuel Gauge]
-    BAT -->|VBAT| RT[RT6160 DC/DC Converter]
+flowchart LR
+    %% Setare grupuri vizuale (Subgrafe)
     
-    %% Conexiuni Power catre MCU
-    RT -->|3.3V| MCU[nRF52840 MCU + BLE]
+    subgraph Sistem_Alimentare [1. Management Energie]
+        direction TB
+        USB([Port USB-C KH-16P]) -->|5V| BQ[LiPo Charger BQ25180]
+        BQ -->|Încărcare| BAT[(Baterie LiPo 3.7V)]
+        BAT -->|Tensiune| MAX[Fuel Gauge MAX17048]
+        BAT -->|Tensiune| RT[Convertor DC/DC RT6160]
+    end
 
-    %% I2C Bus
-    BQ <-->|I2C| MCU
-    MAX <-->|I2C| MCU
-    RT <-->|I2C| MCU
-    IMU[BMA423 Accelerometru] <-->|I2C| MCU
-    HAPTIC[DRV2605 Haptic Driver] <-->|I2C| MCU
+    subgraph Procesare_Centrala [2. Core Processing]
+        MCU{{SoC nRF52840 + BLE}}
+        SWD([Interfață Debug TC2030]) <-->|SWD| MCU
+    end
 
-    %% Ieșiri Haptice
-    HAPTIC -->|Drive| MOT[Motor Vibrații LRA]
+    subgraph Periferice [3. Senzori & Interfețe]
+        direction TB
+        BTN((Butoane Tactile x3))
+        IMU[/Accelerometru BMA423/]
+        EPD[/Ecran E-Paper/]
+        HAPTIC[Driver Haptic DRV2605] -->|Semnal Analog| MOT((Motor Vibrații LRA))
+        ANT>Antenă Ceramică Johanson]
+    end
 
-    %% Alte interfețe
-    MCU -->|SPI| EPD[E-Paper Display]
-    MCU ---|RF| ANT[Antenă Ceramică Johanson]
-    BTN[Butoane Tactile x3] -->|GPIO| MCU
-    SWD[TC2030 SWD Debug] <-->|SWD| MCU
+    %% Legături de Alimentare (Power)
+    RT -->|Alimentare 3.3V| MCU
+
+    %% Legături Magistrala I2C (Catre Alimentare)
+    MCU <-->|Magistrală I2C| BQ
+    MCU <-->|Magistrală I2C| MAX
+    MCU <-->|Magistrală I2C| RT
+
+    %% Legături Magistrala I2C (Catre Periferice)
+    MCU <-->|Magistrală I2C| IMU
+    MCU <-->|Magistrală I2C| HAPTIC
+
+    %% Legături Specifice
+    MCU -->|Interfață SPI| EPD
+    MCU ---|Semnal RF 2.4GHz| ANT
+    BTN -->|Pini GPIO| MCU
 ```
 
 ## 2. Componente principale și linkuri utile (BOM)
