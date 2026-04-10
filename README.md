@@ -1,16 +1,36 @@
 # proiectTSC
-# HECTOR - Advanced Smartwatch
+# InkTime Smart Watch
 
 Acest proiect reprezintă designul hardware complet pentru un smartwatch bazat pe ecosistemul nRF52840, incluzând management avansat al bateriei, afișaj E-paper și feedback haptic.
 
 ## 1. Diagrama Bloc a Sistemului
 
 Arhitectura proiectului este împărțită în 3 etaje principale: Input & Management Energie (Power), Unitatea Centrală de Procesare (Core MCU) și Interfețe Externe (Periferice și RF).
-<p align="center">
-  <img src="diagram/diagrama.png" alt="Diagrama Bloc Proiect" width="800">
-  <br>
-  <b>Figura 1: Arhitectura Sistemului - Diagramă Bloc</b>
-</p>
+graph LR
+    %% Alimentare
+    USB[USB-C KH-TYPE-C-16P] -->|5V| BQ[BQ25180 LiPo Charger]
+    BQ -->|Încărcare| BAT[LiPo Battery 3.7V]
+    BAT -->|VBAT| MAX[MAX17048 Fuel Gauge]
+    BAT -->|VBAT| RT[RT6160 DC/DC Converter]
+    
+    %% Conexiuni Power catre MCU
+    RT -->|3.3V| MCU[nRF52840 MCU + BLE]
+
+    %% I2C Bus
+    BQ <-->|I2C| MCU
+    MAX <-->|I2C| MCU
+    RT <-->|I2C| MCU
+    IMU[BMA423 Accelerometru] <-->|I2C| MCU
+    HAPTIC[DRV2605 Haptic Driver] <-->|I2C| MCU
+
+    %% Ieșiri Haptice
+    HAPTIC -->|Drive| MOT[Motor Vibrații LRA]
+
+    %% Alte interfețe
+    MCU -->|SPI| EPD[E-Paper Display]
+    MCU ---|RF| ANT[Antenă Ceramică Johanson]
+    BTN[Butoane Tactile x3] -->|GPIO| MCU
+    SWD[TC2030 SWD Debug] <-->|SWD| MCU
 ## 2. Componente principale și linkuri utile (BOM)
 
 | Componenta | Link JLCPCB | DATASHEET |
