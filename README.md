@@ -6,6 +6,8 @@ Acest proiect reprezintă designul hardware complet pentru un smartwatch bazat p
 ## 1. Diagrama Bloc a Sistemului
 
 Arhitectura proiectului este împărțită în 3 etaje principale: Input & Management Energie (Power), Unitatea Centrală de Procesare (Core MCU) și Interfețe Externe (Periferice și RF).
+
+```mermaid
 graph LR
     %% Alimentare
     USB[USB-C KH-TYPE-C-16P] -->|5V| BQ[BQ25180 LiPo Charger]
